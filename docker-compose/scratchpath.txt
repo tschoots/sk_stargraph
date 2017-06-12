@@ -1,0 +1,11 @@
+# error for electric search you have to increase max_map_count
+max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+sudo sysctl -w vm.max_map_count=262144
+
+
+# static ip address in docker-compose file
+https://stackoverflow.com/questions/27937185/assign-static-ip-to-docker-container
+https://docs.docker.com/compose/compose-file/#ipv4_address-ipv6_address
+
+# stargraph github
+https://github.com/Lambda-3/Stargraph

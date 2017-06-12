@@ -1,0 +1,49 @@
+version: '2.1'
+
+services:
+ 
+  elastic:
+    image: elasticsearch:5.1.1
+    container_name: elastic
+    command: "-Ecluster.name=StarGraphV2Cluster -Ebootstrap.memory_lock=true -Ediscovery.zen.minimum_master_nodes=1"
+    expose:
+      - 9300
+    volumes:
+      - ./esdata:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    mem_limit: 18g
+    cap_add:
+      - IPC_LOCK
+    environment:
+      - "ES_JAVA_OPTS=-Xms17g -Xmx17g"
+    networks:
+      static-network:
+        ipv4_address: 172.20.0.3
+
+  stargraph:
+    image: lambdacube/stargraph:latest
+    container_name: stargraphv2
+    ports:
+      - 8917:8917
+    volumes:
+      - ./logs:/usr/share/stargraph/logs
+      - ./data:/usr/share/stargraph/data
+    mem_limit: 18g
+    environment:
+      - "STARGRAPH_JAVA_OPTS=-Xms17g -Xmx17g"
+    networks:
+      static-network:
+        ipv4_address: 172.20.0.2
+
+
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
